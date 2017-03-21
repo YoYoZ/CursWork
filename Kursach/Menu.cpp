@@ -53,6 +53,7 @@ void Menu::getStarted()
             case 8:
                 cout<<"Goodbye"<<endl;
                 break;
+                
         }
     }
     else

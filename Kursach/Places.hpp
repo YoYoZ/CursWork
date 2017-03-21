@@ -6,6 +6,7 @@
 //  Copyright © 2017 Anton Solyarik. All rights reserved.
 //
 #include <string>
+#include <stdio.h>
 #ifndef Places_hpp
 #define Places_hpp
 using namespace std;
@@ -33,8 +34,11 @@ public:
 
 class Theater : private CultPlace
 {
-    
+protected:
+    int foodPrice;
+public:
+    void showData();
 };
-#include <stdio.h>
+
 
 #endif /* Places_hpp */
