@@ -7,3 +7,9 @@
 //
 
 #include "Places.hpp"
+
+
+Cinema::~Cinema()
+{
+    delete [] events;
+}
