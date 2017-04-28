@@ -10,31 +10,54 @@
 #include "Cinema.hpp"
 #include "Theater.hpp"
 
-
-void CultPlace::save(std::fstream& stream) {
-    stream << name << endl;
-    stream << adress << endl;
-    
-#warning Do something with *events.
+void CultPlace::save(ostream& os)
+{
+    os << name << endl;
+    os << adress << endl; 
 }
 
-CultPlace* CultPlace::loadObject(std::fstream& stream) {
-    int type = 0;
-    stream.read(reinterpret_cast<char*>(&type), sizeof(int));
-    CultPlace *place = NULL;
+void CultPlace::load(istream& is)
+{
+    getline(is, name);
+    getline(is, adress);
+}
+
+ostream& operator <<(ostream& os, CultPlace *place)
+{
+    place->save(os);
+    return os;
+}
+
+istream& operator >> (istream& is, CultPlace **place)
+{
+    PlaceTypes type;
+    is >> &type;
     switch (type) {
         case CINEMA:
-            place = new Cinema();
+            *place = new Cinema();
             break;
         case THEATER:
-            place = new Theater();
+            *place = new Theater();
+            break;
+        default:
+            *place = NULL;
             break;
     }
-    place->load(stream);
-    return place;
+    if (*place != NULL)
+        (*place)->load(is);
+    return is;
 }
 
-void CultPlace::load(std::fstream& stream) {
-    getline(stream, name);
-    getline(stream, adress);
+ostream& operator <<(ostream& os, PlaceTypes type) {
+    os.write(reinterpret_cast<char*>(&type), sizeof(PlaceTypes));
+    return os;
 }
+
+istream& operator >>(istream& is, PlaceTypes* type) {
+    is.read(reinterpret_cast<char*>(type), sizeof(PlaceTypes));
+    return is;
+}
+
+
+
+

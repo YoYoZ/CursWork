@@ -69,57 +69,46 @@ node* PrioritizedList::getHighest()
     }
     return highestPrior;
 }
-
-bool PrioritizedList::saveToFile(string filename) {
-    fstream ostream;
-    ostream.open(filename, ios::binary | ios::trunc | ios::out);
-    if (ostream.bad())
-        return false;
-    int s = size();
-    ostream.write(reinterpret_cast<char*>(&s), sizeof(int));
-    node *el = elem;
-    for (;el != NULL; el = el->next) {
-        ostream.write(reinterpret_cast<char*>(&(el->priority)), sizeof(int));
-        el->cp->save(ostream);
-    }
-    ostream.close();
-    return true;
-}
-
-int PrioritizedList::size() {
+int PrioritizedList::size()
+{
     int count = 0;
-    node *el = elem;
-    while (el != NULL) {
-        count++;
-        el = el->next;
-    }
-    
+    for (node *el = elem; el != NULL; count++, el = el->next) {}    
     return count;
 }
+node* PrioritizedList::getHead()
+{
+    return elem;
+}
 
-PrioritizedList* PrioritizedList::loadFromFile(string filename) {
-    PrioritizedList *list = NULL;
-    int size = 0;
-    fstream istream;
-    istream.open(filename, ios::binary | ios::in);
-    if (istream.bad())
-        return NULL;
-    
-    istream.read(reinterpret_cast<char*>(&size), sizeof(int));
+ostream& operator <<(ostream& os, PrioritizedList& list)
+{
+    int size = list.size();
+    os.write(reinterpret_cast<char*>(&size), sizeof(int));
+    for (node* element = list.getHead(); element != NULL; element = element->next) {
+        os.write(reinterpret_cast<char*>(&element->priority), sizeof(int));
+        os << element->cp;
+    }
+    return os;
+}
+
+istream& operator >> (istream& is, PrioritizedList **list)
+{
+    int size;
+    is.read(reinterpret_cast<char*>(&size), sizeof(int));
+
     for (int i = 0; i < size; ++i) {
         int priority  = 0;
-        istream.read(reinterpret_cast<char*>(&priority), sizeof(int));
-        CultPlace *cp = CultPlace::loadObject(istream);
-        if (list == NULL) {
-            list = new PrioritizedList(cp, priority);
+        is.read(reinterpret_cast<char*>(&priority), sizeof(priority));
+        CultPlace *cp;
+        is >> &cp;
+        if (i == 0) {
+            *list = new PrioritizedList(cp, priority);
         }
         else {
-            list->push(cp, priority);
-        }
-        
+            (*list)->push(cp, priority);
+        }        
     }
-    istream.close();
-    return list;
+    return is;
 }
 
 

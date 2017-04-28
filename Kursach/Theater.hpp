@@ -17,15 +17,15 @@ class Theater : public CultPlace
 private:
     int antraktTime;
     int countOfDecorations;
-public:
     Theater() {}
+    void save(ostream& os);
+    void load(istream& is);
+public:
     Theater(string name_t, string adress_t, string *events_t, int foodPrice_t, int num);
-    ~Theater();
     void getEventsList(string n) {};
     void findEvent(string n) {};
     void showData();
-    void save(std::fstream& stream);
-    void load(std::fstream& stream);
+    friend istream& operator >> (istream& is, CultPlace **place);
 };
 
 #endif /* Theater_hpp */

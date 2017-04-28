@@ -9,16 +9,21 @@
 #ifndef PrioritizedList_hpp
 #define PrioritizedList_hpp
 
-#include <stdio.h>
 #include "Places.hpp"
 
 struct node
 {
     int priority;
     CultPlace *cp;
-    node *next;
-    
+    node *next;    
 };
+
+class PrioritizedList;
+
+ostream& operator <<(ostream& os, PrioritizedList& list);
+istream& operator >>(istream& is, PrioritizedList **list);
+
+
 
 class PrioritizedList
 {
@@ -31,8 +36,7 @@ public:
     void removeLast();
     void removeFirst();
     node *getHighest();
-    bool saveToFile(string filename);
     int size();
-    static PrioritizedList* loadFromFile(string filename);
+    node* getHead();
 };
 #endif /* PrioritizedList_hpp */
