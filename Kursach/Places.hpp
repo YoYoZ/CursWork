@@ -9,7 +9,13 @@
 #include <stdio.h>
 #ifndef Places_hpp
 #define Places_hpp
+
+#include <fstream>
 using namespace std;
+
+enum PlaceTypes {
+    CINEMA = 1, THEATER
+};
 
 class CultPlace
 {
@@ -17,39 +23,24 @@ protected:
     string name;
     string adress;
     string *events;
+    int numberOfEvents;
 public:
-    CultPlace(string name, string adress)
+    CultPlace() {}
+    CultPlace(string name, string adress, int num)
     {
         this->name = name;
         this->adress = adress;
+        this->numberOfEvents = num;
     }
-    virtual void getEventsList(string name);
-    virtual void findEvent(string name);
-};
-
-class Cinema : private CultPlace
-{
-protected:
-    int ticketPrice;
-public:
-    Cinema(string *events_t, int ticketPrice_t)
-    {
-        ticketPrice = ticketPrice_t;
-    }
-    ~Cinema();
-    void showData();
+    virtual void getEventsList(string) = 0;
+    virtual void findEvent(string) = 0;
+    virtual void showData() = 0;
+    virtual void save(std::fstream& stream);
+    virtual void load(std::fstream& stream);
+    static CultPlace* loadObject(std::fstream& stream);
     
 };
 
-class Theater : private CultPlace
-{
-protected:
-    int foodPrice;
-public:
-    Theater(string name_t, string adress_t, string *events_t, int foodPrice_t);
-    ~Theater();
-    void showData();
-};
 
 
 #endif /* Places_hpp */

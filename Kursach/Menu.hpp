@@ -10,11 +10,15 @@
 #define Menu_hpp
 
 #include <stdio.h>
+#include "PrioritizedList.hpp"
 class Menu
 {
 
 private:
     int selection;
+    PrioritizedList *p = nullptr;
+    bool initialized = false;
+    char s[10];
 public:
     void getStarted();
 };

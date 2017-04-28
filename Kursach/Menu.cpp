@@ -9,11 +9,13 @@
 #include "Menu.hpp"
 #include <string.h>
 #include <iostream>
+#include "Places.hpp"
+#include "Cinema.hpp"
 using namespace std;
 
+projectorType ConvertTo(string p);
 void Menu::getStarted()
 {
-    char s[10];
     cout<<"Hello. Please, enter your choice."<<endl;
     cout<<"#1. Create a cinema"<<endl;
     cout<<"#2. Create a theater"<<endl;
@@ -30,8 +32,35 @@ void Menu::getStarted()
         switch(selection)
         {
             case 1:
-                cout<<"Created new cinema"<<endl;
+            {
+                cout<<"Please, enter Name, Adress, projector Type and priority to Work"<<endl;
+                /*string name;
+                string adress;
+                string projectorType;
+                int priority;
+                cin>>name;
+                cin>>adress;
+                cin>>projectorType;
+                cin>>priority;
+                Cinema *cn = new Cinema(name, adress, ConvertTo(projectorType));
+                if(!initialized)
+                {
+                    p = new PrioritizedList(cn, priority);
+                    initialized = true;
+                }
+                else
+                    p->push(cn, priority);
+                */
+                string events[] = { "Event 1", "Event 2"};
+                string norm = "test";
+                Cinema *cnn = new Cinema("KISLYAKOV", "MAKS", ConvertTo(("IMAX")), 25, events, 2);
+                Cinema *cn = new Cinema("KISLYAKOV 2", "MAKS 2", ConvertTo(("IMAX")),25, &norm, 2);
+                p = new PrioritizedList(cn, 9);
+                p->push(cnn, 9);
+                p->saveToFile("data.dt");
+                p = PrioritizedList::loadFromFile("data.dt");
                 break;
+            }
             case 2:
                 cout<<"Created new theater"<<endl;
                 break;
@@ -62,5 +91,17 @@ void Menu::getStarted()
         selection = 0;
         getStarted();
     }
+    
+}
+ projectorType ConvertTo(string p)
+{
+    if  (p=="IMAX")
+        return projectorType::IMAX;
+    else if (p=="2D")
+        return projectorType::d2;
+    else if (p=="3D")
+        return projectorType::d3;
+    else
+        return projectorType::Uknown;
     
 }

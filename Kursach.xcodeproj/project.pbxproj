@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3DABF0CD1EA752BE00E3765E /* PrioritizedList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DABF0CB1EA752BE00E3765E /* PrioritizedList.cpp */; };
+		3DABF0D01EA7557500E3765E /* Cinema.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DABF0CE1EA7557500E3765E /* Cinema.cpp */; };
+		3DABF0D31EA755A400E3765E /* Theater.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DABF0D11EA755A400E3765E /* Theater.cpp */; };
 		3DCA02751E81AC94007E27C0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DCA02741E81AC94007E27C0 /* main.cpp */; };
 		3DCA027D1E81ACA5007E27C0 /* Menu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DCA027B1E81ACA5007E27C0 /* Menu.cpp */; };
 		3DCA02801E81B337007E27C0 /* Places.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DCA027E1E81B337007E27C0 /* Places.cpp */; };
@@ -25,6 +28,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3DABF0CB1EA752BE00E3765E /* PrioritizedList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PrioritizedList.cpp; sourceTree = "<group>"; };
+		3DABF0CC1EA752BE00E3765E /* PrioritizedList.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PrioritizedList.hpp; sourceTree = "<group>"; };
+		3DABF0CE1EA7557500E3765E /* Cinema.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cinema.cpp; sourceTree = "<group>"; };
+		3DABF0CF1EA7557500E3765E /* Cinema.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Cinema.hpp; sourceTree = "<group>"; };
+		3DABF0D11EA755A400E3765E /* Theater.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Theater.cpp; sourceTree = "<group>"; };
+		3DABF0D21EA755A400E3765E /* Theater.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Theater.hpp; sourceTree = "<group>"; };
 		3DCA02711E81AC94007E27C0 /* Kursach */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Kursach; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DCA02741E81AC94007E27C0 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		3DCA027B1E81ACA5007E27C0 /* Menu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Menu.cpp; sourceTree = "<group>"; };
@@ -68,6 +77,12 @@
 				3DCA027C1E81ACA5007E27C0 /* Menu.hpp */,
 				3DCA027E1E81B337007E27C0 /* Places.cpp */,
 				3DCA027F1E81B337007E27C0 /* Places.hpp */,
+				3DABF0CB1EA752BE00E3765E /* PrioritizedList.cpp */,
+				3DABF0CC1EA752BE00E3765E /* PrioritizedList.hpp */,
+				3DABF0CE1EA7557500E3765E /* Cinema.cpp */,
+				3DABF0CF1EA7557500E3765E /* Cinema.hpp */,
+				3DABF0D11EA755A400E3765E /* Theater.cpp */,
+				3DABF0D21EA755A400E3765E /* Theater.hpp */,
 			);
 			path = Kursach;
 			sourceTree = "<group>";
@@ -130,6 +145,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				3DCA027D1E81ACA5007E27C0 /* Menu.cpp in Sources */,
+				3DABF0D31EA755A400E3765E /* Theater.cpp in Sources */,
+				3DABF0D01EA7557500E3765E /* Cinema.cpp in Sources */,
+				3DABF0CD1EA752BE00E3765E /* PrioritizedList.cpp in Sources */,
 				3DCA02801E81B337007E27C0 /* Places.cpp in Sources */,
 				3DCA02751E81AC94007E27C0 /* main.cpp in Sources */,
 			);
@@ -258,6 +276,7 @@
 				3DCA027A1E81AC94007E27C0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
