@@ -32,6 +32,7 @@ public:
         this->adress = adress;
         this->numberOfEvents = num;
     }
+    ~CultPlace();
     virtual void getEventsList(string) = 0;
     virtual void findEvent(string) = 0;
     virtual void showData() = 0;

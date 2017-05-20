@@ -86,7 +86,7 @@ bool PrioritizedList::saveToFile(string filename) {
     return true;
 }
 
-int PrioritizedList::size() {
+const int PrioritizedList::size() {
     int count = 0;
     node *el = elem;
     while (el != NULL) {

@@ -33,7 +33,12 @@ CultPlace* CultPlace::loadObject(std::fstream& stream) {
     place->load(stream);
     return place;
 }
-
+CultPlace::~CultPlace()
+{
+    delete &name;
+    delete &adress;
+    delete  events;
+}
 void CultPlace::load(std::fstream& stream) {
     getline(stream, name);
     getline(stream, adress);

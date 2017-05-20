@@ -32,7 +32,7 @@ public:
     void removeFirst();
     node *getHighest();
     bool saveToFile(string filename);
-    int size();
+    const int size();
     static PrioritizedList* loadFromFile(string filename);
 };
 #endif /* PrioritizedList_hpp */
