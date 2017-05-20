@@ -6,9 +6,10 @@
 //  Copyright © 2017 Anton Solyarik. All rights reserved.
 //
 
-#include "Menu.hpp"
-#include <string.h>
+#include <string>
 #include <iostream>
+#include <fstream>
+#include "Menu.hpp"
 #include "Places.hpp"
 #include "Cinema.hpp"
 using namespace std;
@@ -53,12 +54,34 @@ void Menu::getStarted()
                 */
                 string events[] = { "Event 1", "Event 2"};
                 string norm = "test";
-                Cinema *cnn = new Cinema("KISLYAKOV", "MAKS", ConvertTo(("IMAX")), 25, events, 2);
-                Cinema *cn = new Cinema("KISLYAKOV 2", "MAKS 2", ConvertTo(("IMAX")),25, &norm, 2);
-                p = new PrioritizedList(cn, 9);
-                p->push(cnn, 9);
-                p->saveToFile("data.dt");
-                p = PrioritizedList::loadFromFile("data.dt");
+                Cinema *cn1 = new Cinema("Cinema 3", "Test 1", ConvertTo(("IMAX")), 25, events, 2);
+                Cinema *cn2 = new Cinema("Cinema 1", "Test 2", ConvertTo(("IMAX")),20, &norm, 2);
+                Cinema *cn3 = new Cinema("Cinema 2", "Test 3", ConvertTo(("IMAX")),20, &norm, 2);
+                p = new PrioritizedList(cn1, 9);
+                p->push(cn2, 9);
+                p->push(cn3, 8);
+                p->sortByName();
+                CultPlace *pp = p->getByName("Event 1");
+                pp->addEvent("ZALUPA");
+                pp->displayEvents();
+                pp->removeEvent("Event 1");
+                pp->displayEvents();
+                cout<<(pp->getNumberOfEvents())<<endl;
+                fstream str;
+                str.open("test.bin", ios::binary | ios::trunc | ios::out | ios::in);
+                if (str.bad()) {
+                    cout << "Can't create file." << endl;
+                    break;
+                }
+                //Функция принимает ссылку, поэтому надо разыменовать.
+                str << *p; 
+                delete p;
+                str.flush();
+                //Переходим в начало файла
+                str.seekg(ios::beg);
+                //Нужно передать указатель на указатель, что функция могла положить туда
+                // результаты
+                str >> &p;
                 break;
             }
             case 2:

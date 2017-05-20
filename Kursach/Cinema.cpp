@@ -8,40 +8,27 @@
 
 #include "Cinema.hpp"
 
-
-Cinema::Cinema(string name, string adress, projectorType p, int countOfHalls, string *events, int num) : CultPlace(name, adress, num)
+Cinema::Cinema(string name, string adress, projectorType p, int countOfHalls, string *events, int num) : CultPlace(name, adress, num, events)
 {
     this->p = p;
     this->countOfHalls = countOfHalls;
-
-
 }
-void Cinema::showData()
+
+void Cinema::showData() {}
+void Cinema::getEventsList(string n){}
+void Cinema::findEvent(string n){}
+
+void Cinema::save(ostream& os)
 {
-    
-}
- void Cinema::getEventsList(string n)
-{
-    
-}
-void Cinema::findEvent(string n)
-{
-    
-}
-Cinema::~Cinema()
-{}
-
-void Cinema::save(std::fstream& stream) {
-    int type = CINEMA;
-    stream.write(reinterpret_cast<char*>(&type), sizeof(int));
-    CultPlace::save(stream);
-    stream.write(reinterpret_cast<char*>(&p), sizeof(projectorType));
-    stream.write(reinterpret_cast<char*>(&countOfHalls), sizeof(int));
-   
+    os << CINEMA;
+    CultPlace::save(os);
+    os.write(reinterpret_cast<char*>(&p), sizeof(projectorType));
+    os.write(reinterpret_cast<char*>(&countOfHalls), sizeof(countOfHalls));
 }
 
-void Cinema::load(std::fstream& stream) {
-    CultPlace::load(stream);
-    stream.read(reinterpret_cast<char*>(&p), sizeof(projectorType));
-    stream.read(reinterpret_cast<char*>(&countOfHalls), sizeof(int));
+void Cinema::load(istream& is)
+{
+    CultPlace::load(is);
+    is.read(reinterpret_cast<char*>(&p), sizeof(projectorType));
+    is.read(reinterpret_cast<char*>(&countOfHalls), sizeof(countOfHalls));
 }

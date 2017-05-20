@@ -10,36 +10,107 @@
 #include "Cinema.hpp"
 #include "Theater.hpp"
 
-
-void CultPlace::save(std::fstream& stream) {
-    stream << name << endl;
-    stream << adress << endl;
-    
-#warning Do something with *events.
+void CultPlace::save(ostream& os)
+{
+    os << name << endl;
+    os << adress << endl;
+    os.write(reinterpret_cast<char*>(&numberOfEvents), sizeof(numberOfEvents));
+    for (int i = 0; i < numberOfEvents; ++i) {
+        os << events[i] << endl;
+    }
 }
 
-CultPlace* CultPlace::loadObject(std::fstream& stream) {
-    int type = 0;
-    stream.read(reinterpret_cast<char*>(&type), sizeof(int));
-    CultPlace *place = NULL;
+void CultPlace::load(istream& is)
+{
+    getline(is, name);
+    getline(is, adress);
+    is.read(reinterpret_cast<char*>(&numberOfEvents), sizeof(numberOfEvents));
+    events = new string[numberOfEvents];
+    for (int i = 0; i < numberOfEvents; ++i) {
+        getline(is, events[i]);
+    }
+}
+string CultPlace::getName()
+{
+    return name;
+}
+
+int CultPlace::getNumberOfEvents()
+{
+    return numberOfEvents;
+}
+
+
+ostream& operator <<(ostream& os, CultPlace *place)
+{
+    place->save(os);
+    return os;
+}
+
+
+istream& operator >> (istream& is, CultPlace **place)
+{
+    PlaceTypes type;
+    is >> &type;
     switch (type) {
         case CINEMA:
-            place = new Cinema();
+            *place = new Cinema();
             break;
         case THEATER:
-            place = new Theater();
+            *place = new Theater();
+            break;
+        default:
+            *place = NULL;
             break;
     }
-    place->load(stream);
-    return place;
+    if (*place != NULL)
+        (*place)->load(is);
+    return is;
 }
-CultPlace::~CultPlace()
+
+ostream& operator <<(ostream& os, PlaceTypes type) {
+    os.write(reinterpret_cast<char*>(&type), sizeof(PlaceTypes));
+    return os;
+}
+
+istream& operator >>(istream& is, PlaceTypes* type) {
+    is.read(reinterpret_cast<char*>(type), sizeof(PlaceTypes));
+    return is;
+}
+
+string* CultPlace::getEvents()
 {
-    delete &name;
-    delete &adress;
-    delete  events;
+    return events;
 }
-void CultPlace::load(std::fstream& stream) {
-    getline(stream, name);
-    getline(stream, adress);
+void CultPlace::addEvent(string name)
+{
+    numberOfEvents++;
+    string *newEvents = new string[numberOfEvents];
+    for(int i = 0; i<numberOfEvents-1; i++)
+        newEvents[i] = events[i];
+    newEvents[numberOfEvents-1] = name;
+  //  delete[] events;
+    events = newEvents;
 }
+
+void CultPlace::displayEvents()
+{
+    for (int i = 0; i<numberOfEvents; i++)
+        cout<<"EVENT N "<<i<<"  WITH NAME "<<events[i]<<endl;
+}
+void CultPlace::removeEvent(string name)
+{
+    string *newEvents = new string[numberOfEvents - 1];
+    for(int i = 0, j = 0; i < numberOfEvents; i++)
+    {
+        if(events[i] != name)
+        {
+            newEvents[j++] = events[i];
+        }
+    }
+    delete[] events;
+    events = newEvents;
+    numberOfEvents--;
+}
+
+

@@ -12,8 +12,6 @@
 #include <stdio.h>
 #include "Places.hpp"
 
-
-
 enum projectorType
 {
     IMAX, d3, d2, Uknown
@@ -24,17 +22,16 @@ class Cinema : public CultPlace
 private:
     projectorType p;
     int countOfHalls;
-    
-public:
     Cinema() {}
+    void save(ostream& os);
+    void load(istream& is);
+public:
     Cinema(string name, string adress, projectorType p, int countOfHalls, string *events, int num);
-    ~Cinema();
-    void ShowData();
     void getEventsList(string n);
     void findEvent(string n);
     void showData();
-    void save(std::fstream& stream);
-    void load(std::fstream& stream);
+    friend istream& operator >> (istream& is, CultPlace **place);
+
 };
 #endif /* Cinema_hpp */
 
