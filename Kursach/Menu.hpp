@@ -16,9 +16,9 @@ class Menu
 
 private:
     int selection;
-    PrioritizedList *p = nullptr;
     bool initialized = false;
     char s[10];
+    PrioritizedList p;
 public:
     void getStarted();
 };

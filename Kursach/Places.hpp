@@ -43,17 +43,18 @@ public:
         this->events = events;
     }
     ~CultPlace();
-    virtual void getEventsList(string) = 0;
-    virtual void findEvent(string) = 0;
     virtual void showData() = 0;
-    string getName();
-    int getNumberOfEvents();
     void addEvent(string name);
     void removeEvent(string name);
-    string* getEvents();
     void displayEvents();
     friend ostream& operator <<(ostream& os, CultPlace *place);
-    friend istream& operator >> (istream& os, CultPlace **place); 
+    friend istream& operator >> (istream& os, CultPlace **place);
+    string getName();
+    string getAdress();
+    string* getEvents();
+    int getNumberOfEvents();
+    void setName(string name);
+    void setAdress(string adress);
 };
 
 

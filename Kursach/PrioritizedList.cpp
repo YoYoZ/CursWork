@@ -7,6 +7,8 @@
 //
 
 #include "PrioritizedList.hpp"
+//-------------------------------------------------------------------------
+//Конструктор для ініціалізації одразу при створенні классу
 PrioritizedList::PrioritizedList(CultPlace *cp, int priority)
 {
     head = new node();
@@ -16,23 +18,50 @@ PrioritizedList::PrioritizedList(CultPlace *cp, int priority)
     head->priority = priority;
     
 }
+PrioritizedList::PrioritizedList(){}
+//-------------------------------------------------------------------------
+//Метод додавання нових елементів до черги
 void PrioritizedList::push(CultPlace *cp, int priority)
 {
+    if(!initialized)
+    {
+        head = new node();
+        tail = head;
+        head->cp = cp;
+        head->next = tail;
+        head->priority = priority;
+        initialized = true;
+    } else
+    {
     node *blk = new node();
     blk->cp = cp;
     blk->priority = priority;
     tail ->next = blk;
     tail = blk;
-
+    }
 }
-
+//-------------------------------------------------------------------------
+//Метод виведення усіх об'єктів поєлементно
+void PrioritizedList::show()
+{
+    int count  = 1;
+    for (node *el = head; el->cp != NULL; el = el->next)
+    {
+        cout << "Here is element #" << count << ": " << endl;
+        el->cp->showData();
+        count++;
+    }
+}
+//-------------------------------------------------------------------------
+//Метод, що видаляє верхній елемент з черги
 void PrioritizedList::remove()
 {
     node *tmp = head;
     head = head->next;
     delete tmp;
 }
-
+//-------------------------------------------------------------------------
+//Метод, що повертає об'єкт з найбільшим пріорітетом
 node* PrioritizedList::getHighest()
 {
     node *block = head;
@@ -45,20 +74,36 @@ node* PrioritizedList::getHighest()
     }
     return highestPrior;
 }
+//-------------------------------------------------------------------------
+//Метод, що обраховує розмір усієї черги; повертає саме розмір, рахуючи з 1
 int PrioritizedList::size()
 {
     int count = 0;
-    for (node *el = head; el != NULL; count++, el = el->next) {}
+    if(head == tail)
+        return 1;
+    if (initialized)
+    {
+        for (node *el = head; el->cp != NULL; count++, el = el->next){}
+    }
     return count;
 }
+//-------------------------------------------------------------------------
+//Повертає перший елемент черги
 node* PrioritizedList::getHead()
 {
     return head;
 }
-
+//-------------------------------------------------------------------------
+//Повертає останній елемент черги
+node* PrioritizedList::getTail()
+{
+    return tail;
+}
+//-------------------------------------------------------------------------
+//Повертає елемент, що має у собі шукану (передану) подію (або ж пустий покажчик, якщо єлемент не існує)
 CultPlace * PrioritizedList::getByName(string name)
 {
-    for(int i = 0; i<size(); i++)
+    for(int i = 0; i<size()-1; i++)
     {
         CultPlace *cpToWork = get(i)->cp;
         for(int j = 0; j<cpToWork->getNumberOfEvents(); j++)
@@ -72,7 +117,8 @@ CultPlace * PrioritizedList::getByName(string name)
 }
 
 
-
+//-------------------------------------------------------------------------
+//Бульбашкове сортування згідно алфавітного порядку
 void PrioritizedList::sortByName(int step)
 {
 
@@ -89,19 +135,22 @@ void PrioritizedList::sortByName(int step)
     }
     tail = get(size() - 1);
 }
-
+//-------------------------------------------------------------------------
+//Перевантажений оператор виводу
 ostream& operator <<(ostream& os, PrioritizedList& list)
 {
     int size = list.size();
     os.write(reinterpret_cast<char*>(&size), sizeof(int));
-    for (node* element = list.getHead(); element != NULL; element = element->next) {
+    node* element = list.getHead();
+    for (int i = 0; i<size ; element = element->next, i++) {
         os.write(reinterpret_cast<char*>(&element->priority), sizeof(int));
         os << element->cp;
     }
     return os;
 }
-
-istream& operator >> (istream& is, PrioritizedList **list)
+//-------------------------------------------------------------------------
+//Перевантажений оператор вводу
+istream& operator >> (istream& is, PrioritizedList& list)
 {
     int size;
     is.read(reinterpret_cast<char*>(&size), sizeof(int));
@@ -111,16 +160,26 @@ istream& operator >> (istream& is, PrioritizedList **list)
         is.read(reinterpret_cast<char*>(&priority), sizeof(priority));
         CultPlace *cp;
         is >> &cp;
-        if (i == 0) {
-            *list = new PrioritizedList(cp, priority);
-        }
-        else {
-            (*list)->push(cp, priority);
-        }        
+            list.push(cp, priority);
     }
     return is;
 }
-
+//-------------------------------------------------------------------------
+//Метод очищення усього списку
+void PrioritizedList::clearList()
+{
+    int size = this->size();
+    node *tmp = head;
+    node *el = head;
+    for(int i = 0; i<size-1; i++)
+    {
+        tmp = el;
+        el = el->next;
+        delete tmp;
+    }
+}
+//-------------------------------------------------------------------------
+//Метод пошуку елементу по його номеру
 node* PrioritizedList::get(const int i ) {
     node* el = head;
     if (i >= size())
@@ -134,7 +193,8 @@ node* PrioritizedList::get(const int i ) {
     
     return el;
 }
-
+//-------------------------------------------------------------------------
+//Метод присвоєння нового значення елементу по його номеру
 void PrioritizedList::set(const int i, node& elem) {
     int count = 0;
     node* oldNext = NULL;
@@ -165,8 +225,30 @@ void PrioritizedList::set(const int i, node& elem) {
 
 }
 
-
-
+//-------------------------------------------------------------------------
+//Метод видалення елементу згідно його назви
+bool PrioritizedList::removeByName(string name)
+{
+    int size = this->size();
+    for( int i = 0; i < size-1; i++)
+    {
+        node* element = get(i);
+        if (element->cp->getName() == name) {
+            if (i == 0)
+                head = head->next;
+            else if (i + 1 == size) {
+                tail = get(i - 1);
+            }
+            else {
+                node* prev = get(i - 1);
+                node* next = get(i + 1);
+                prev->next = next;
+            }
+            return true;
+        }
+    }
+    return false;
+}
 
 
 

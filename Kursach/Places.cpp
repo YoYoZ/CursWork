@@ -9,7 +9,8 @@
 #include "Places.hpp"
 #include "Cinema.hpp"
 #include "Theater.hpp"
-
+//-------------------------------------------------------------------------
+//Метод виводу у файл базової частини для похідних классів
 void CultPlace::save(ostream& os)
 {
     os << name << endl;
@@ -19,7 +20,8 @@ void CultPlace::save(ostream& os)
         os << events[i] << endl;
     }
 }
-
+//-------------------------------------------------------------------------
+//Метод завантаження базової частини для похідних классів
 void CultPlace::load(istream& is)
 {
     getline(is, name);
@@ -30,6 +32,7 @@ void CultPlace::load(istream& is)
         getline(is, events[i]);
     }
 }
+
 string CultPlace::getName()
 {
     return name;
@@ -40,14 +43,16 @@ int CultPlace::getNumberOfEvents()
     return numberOfEvents;
 }
 
-
+//-------------------------------------------------------------------------
+//Перевантажений оператор вводу
 ostream& operator <<(ostream& os, CultPlace *place)
 {
     place->save(os);
     return os;
 }
 
-
+//-------------------------------------------------------------------------
+//Перевантажений оператор виводу
 istream& operator >> (istream& is, CultPlace **place)
 {
     PlaceTypes type;
@@ -82,6 +87,8 @@ string* CultPlace::getEvents()
 {
     return events;
 }
+//-------------------------------------------------------------------------
+//Метод додавання нової події
 void CultPlace::addEvent(string name)
 {
     numberOfEvents++;
@@ -89,15 +96,17 @@ void CultPlace::addEvent(string name)
     for(int i = 0; i<numberOfEvents-1; i++)
         newEvents[i] = events[i];
     newEvents[numberOfEvents-1] = name;
-  //  delete[] events;
     events = newEvents;
 }
-
+//-------------------------------------------------------------------------
+//Вивід усіх подій
 void CultPlace::displayEvents()
 {
     for (int i = 0; i<numberOfEvents; i++)
-        cout<<"EVENT N "<<i<<"  WITH NAME "<<events[i]<<endl;
+        cout << "\tEvent #"<<i+1<<" named "<<events[i]<<endl;
 }
+//-------------------------------------------------------------------------
+//Видалення окремої події
 void CultPlace::removeEvent(string name)
 {
     string *newEvents = new string[numberOfEvents - 1];
@@ -113,4 +122,17 @@ void CultPlace::removeEvent(string name)
     numberOfEvents--;
 }
 
+string CultPlace::getAdress()
+{
+    return adress;
+}
+
+void CultPlace::setAdress(string adress)
+{
+    this->adress = adress;
+}
+void CultPlace::setName(string name)
+{
+    this->name = name;
+}
 

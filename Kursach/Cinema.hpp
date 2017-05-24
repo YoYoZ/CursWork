@@ -25,12 +25,16 @@ private:
     Cinema() {}
     void save(ostream& os);
     void load(istream& is);
+    string ConvertTo(projectorType p);
 public:
     Cinema(string name, string adress, projectorType p, int countOfHalls, string *events, int num);
-    void getEventsList(string n);
-    void findEvent(string n);
     void showData();
     friend istream& operator >> (istream& is, CultPlace **place);
+    string getProjectorType();
+    int getCountOfHalls();
+    void setProjectorType(string type);
+    void setCountOfHalls(int count);
+    static projectorType ConvertTo(string p);
 
 };
 #endif /* Cinema_hpp */

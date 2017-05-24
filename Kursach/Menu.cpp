@@ -9,64 +9,131 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include "Menu.hpp"
 #include "Places.hpp"
 #include "Cinema.hpp"
+#include "Theater.hpp"
 using namespace std;
+
+int filterInt (istream& is);
 
 projectorType ConvertTo(string p);
 void Menu::getStarted()
 {
     cout<<"Hello. Please, enter your choice."<<endl;
+    cout << "WARNING! IF PROGRAM FREEZES TRY TO TYPE SOMETHING! THANK YOU FOR UNDERSTANDING." << endl;
     cout<<"#1. Create a cinema"<<endl;
     cout<<"#2. Create a theater"<<endl;
     cout<<"#3. Display all cultural places"<<endl;
-    cout<<"#4. Delete specified place"<<endl;
-    cout<<"#5. Save data to file"<<endl;
-    cout<<"#6. Load data from file"<<endl;
-    cout<<"#7. Find the scene"<<endl;
-    cout<<"#8. Exit"<<endl;
+    cout<<"#4. Sort places"<<endl;
+    cout<<"#5. Delete specified place"<<endl;
+    cout<<"#6. Save data to file"<<endl;
+    cout<<"#7. Load data from file"<<endl;
+    cout<<"#8. Find the scene"<<endl;
+    cout<<"#9. Exit"<<endl;
     cin.getline(s, 10);
     selection = atoi(s);
+
     if(selection>0&&selection<9)
     {
         switch(selection)
         {
             case 1:
             {
-                cout<<"Please, enter Name, Adress, projector Type and priority to Work"<<endl;
-                /*string name;
+                cout<<"Please, enter name, adress, projector type, priority of place and count of halls of this cinema:"<<endl;
+                string name;
                 string adress;
                 string projectorType;
                 int priority;
+                int countOfHalls;
+                int numEvents = 0;
+                cout << "Enter name: ";
                 cin>>name;
+                cout << "Enter adress: ";
                 cin>>adress;
+                cout << "Enter projector type: ";
                 cin>>projectorType;
-                cin>>priority;
-                Cinema *cn = new Cinema(name, adress, ConvertTo(projectorType));
-                if(!initialized)
+                cout << "Enter priority: ";
+                priority = filterInt(cin);
+                cout << "Enter count of Halls: ";
+                countOfHalls = filterInt(cin);
+                cout << "Now, please, type how many events do you need for this place."<<endl;
+                cout << "Num events: ";
+                numEvents = filterInt(cin);
+                string *Events = new string[numEvents];
+                if(numEvents!=0)
                 {
-                    p = new PrioritizedList(cn, priority);
-                    initialized = true;
+                    cout<<"Type by one events: "<<endl;
+                    for(int i =  0; i<numEvents; i++) {
+                        cout << "Type " << (i + 1) << " event: ";
+                        cin>>Events[i];
+                    }
+                    
                 }
+                Cinema *cn = new Cinema(name, adress, Cinema::ConvertTo(projectorType),countOfHalls, Events, numEvents);
+                p.push(cn, priority);
+                break;
+            }
+            case 2:
+            {
+                cout<<"Please, enter name, adress, count of decoration, antract time and priority to work of this theater:"<<endl;
+                string name;
+                string adress;
+                int countOfDecorations;
+                int priority;
+                int antractTime;
+                int numEvents;
+                cout<<"Enter name:";
+                cin>>name;
+                cout<<"Enter adress: ";
+                cin>>adress;
+                cout<<"Enter count of decorations: ";
+                countOfDecorations = filterInt(cin);
+                cout<<"Enter antract time: ";
+                antractTime = filterInt(cin);
+                cout<<"Enter priority: ";
+                priority = filterInt(cin);
+                cout<<"Now, please, type how many events do you need for this place."<<endl;
+                numEvents = filterInt(cin);
+                string *Events = new string[numEvents];
+                if(numEvents!=0)
+                {
+                    cout<<"Type by one events: "<<endl;
+                    for(int i =  0; i<numEvents; i++) {
+                        cout << "Type " << (i + 1) << " event: ";
+                        cin>>Events[i];
+                    }
+                    
+                }
+                Theater *th = new Theater(name, adress, Events,countOfDecorations, antractTime, numEvents);
+                    p.push(th, priority);
+        }
+                break;
+            case 3:
+                cout<<"Here all all cult. places:"<<endl;
+                p.show();
+                break;
+            case 4:
+            {
+                p.sortByName();
+                cout<<"Elements are now sorted"<<endl;
+                break;
+            }
+            case 5:
+            {
+                cout<<"Enter the name to delete:"<<endl;
+                string toDelete;
+                cin>>toDelete;
+                if(p.removeByName(toDelete))
+                    cout<<"Completed successfully"<<endl;
                 else
-                    p->push(cn, priority);
-                */
-                string events[] = { "Event 1", "Event 2"};
-                string norm = "test";
-                Cinema *cn1 = new Cinema("Cinema 3", "Test 1", ConvertTo(("IMAX")), 25, events, 2);
-                Cinema *cn2 = new Cinema("Cinema 1", "Test 2", ConvertTo(("IMAX")),20, &norm, 2);
-                Cinema *cn3 = new Cinema("Cinema 2", "Test 3", ConvertTo(("IMAX")),20, &norm, 2);
-                p = new PrioritizedList(cn1, 9);
-                p->push(cn2, 9);
-                p->push(cn3, 8);
-                p->sortByName();
-                CultPlace *pp = p->getByName("Event 1");
-                pp->addEvent("ZALUPA");
-                pp->displayEvents();
-                pp->removeEvent("Event 1");
-                pp->displayEvents();
-                cout<<(pp->getNumberOfEvents())<<endl;
+                    cout<<"Error. Perfaps you made an typo error?"<<endl;
+                break;
+            }
+            case 6:
+            {
+                cout<<"Saving.."<<endl;
                 fstream str;
                 str.open("test.bin", ios::binary | ios::trunc | ios::out | ios::in);
                 if (str.bad()) {
@@ -74,37 +141,72 @@ void Menu::getStarted()
                     break;
                 }
                 //Функция принимает ссылку, поэтому надо разыменовать.
-                str << *p; 
-                delete p;
-                str.flush();
-                //Переходим в начало файла
-                str.seekg(ios::beg);
+                str << p;
+                
+                // Same sum
+                str.clear();
+                str.seekg(1);
+                char sum = 0;
+                while (str.good()) {
+                    char tmp;
+                    str.read(&tmp, sizeof(char));
+                    sum += tmp;
+                }
+                str.clear();
+                str.seekg(0);
+                str.seekp(0);
+                str.write(&sum, sizeof(char));
+                str.close();
                 //Нужно передать указатель на указатель, что функция могла положить туда
                 // результаты
-                str >> &p;
                 break;
             }
-            case 2:
-                cout<<"Created new theater"<<endl;
-                break;
-            case 3:
-                cout<<"Here all all cult. places"<<endl;
-                break;
-            case 4:
-                cout<<"Enter the name to delete"<<endl;
-                break;
-            case 5:
-                cout<<"Saving.."<<endl;
-                break;
-            case 6:
-                cout<<"Loading.."<<endl;
-                break;
             case 7:
-                cout<<"Enter ID"<<endl;
+            {
+                cout<<"Loading.."<<endl;
+                fstream str;
+                str.open("test.bin", ios::binary | ios::in);
+                if (str.bad()) {
+                    cout << "Can't open file." << endl;
+                    break;
+                }
+                char fileSum = 0;
+                char calcSum = 0;
+                str.read(&fileSum, sizeof(char));
+                while (str.good()) {
+                    char tmp;
+                    str.read(&tmp, sizeof(char));
+                    calcSum += tmp;
+                }
+                if (fileSum != calcSum) {
+                    cout << "Alert! File data corruption detected. Exciting load process; now you need to re-save or recover file." << endl;
+                    str.close();
+                    return;
+                }
+                str.clear();
+                str.seekg(ios::beg);
+                p.clearList();
+                str >> p;
+        }
                 break;
             case 8:
-                cout<<"Goodbye"<<endl;
+            {
+                cout<<"Enter ID"<<endl;
+                string in;
+                cin>>in;
+                CultPlace *cp = p.getByName(in);
+                if(cp !=nullptr)
+                {
+                cout<<"It is in a place:"<<endl;
+                cp->showData();
+                }
+                else
+                    cout<<"Event not found. Perhaps you made a mistake?"<<endl;
                 break;
+            }
+            case 9:
+                cout<<"Goodbye"<<endl;
+                return;
                 
         }
     }
@@ -114,17 +216,32 @@ void Menu::getStarted()
         selection = 0;
         getStarted();
     }
+       cout << "Press any key to continue" << endl;
+    cin.ignore();
+ 
+    getStarted();
     
 }
- projectorType ConvertTo(string p)
-{
-    if  (p=="IMAX")
-        return projectorType::IMAX;
-    else if (p=="2D")
-        return projectorType::d2;
-    else if (p=="3D")
-        return projectorType::d3;
-    else
-        return projectorType::Uknown;
+
+
+int filterInt (istream& is) {
+    stringstream convertor;
+    string tmp;
+    int result = 0;
+    while (true) {
+        is >> tmp;
+        convertor << tmp;
+        convertor >> result;
+        if (!convertor.fail() && result > 0)
+            return result;
+        else
+        {
+            convertor.clear();
+            convertor.seekg(ios::beg);
+            convertor.seekp(ios::beg);
+            tmp = "";
+            cout << "error in symbols; Please, retype."<<endl;
+        }
+    }
     
 }
