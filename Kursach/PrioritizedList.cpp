@@ -44,12 +44,12 @@ void PrioritizedList::push(CultPlace *cp, int priority)
 //Метод виведення усіх об'єктів поєлементно
 void PrioritizedList::show()
 {
-    int count  = 1;
-    for (node *el = head; el->cp != NULL; el = el->next)
+    node *el = head;
+    for (int i = 0; i<size(); i++)
     {
-        cout << "Here is element #" << count << ": " << endl;
+        cout << "Here is element #" << i+1 << ": " << endl;
         el->cp->showData();
-        count++;
+        el = el->next;
     }
 }
 //-------------------------------------------------------------------------

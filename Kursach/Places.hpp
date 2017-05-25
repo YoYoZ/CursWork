@@ -31,19 +31,13 @@ protected:
     string adress;
     string *events;
     int numberOfEvents;
-    CultPlace() {}
-    virtual void save(ostream& os);
-    virtual void load(istream& is);
 public:
-    CultPlace(string name, string adress, int num, string* events)
-    {
-        this->name = name;
-        this->adress = adress;
-        this->numberOfEvents = num;
-        this->events = events;
-    }
+    CultPlace(string name, string adress, int num, string* events);
+    CultPlace() {}
     ~CultPlace();
     virtual void showData() = 0;
+    virtual void save(ostream& os);
+    virtual void load(istream& is);
     void addEvent(string name);
     void removeEvent(string name);
     void displayEvents();

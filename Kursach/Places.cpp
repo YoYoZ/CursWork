@@ -9,6 +9,18 @@
 #include "Places.hpp"
 #include "Cinema.hpp"
 #include "Theater.hpp"
+
+CultPlace::CultPlace(string name, string adress, int num, string* events)
+{
+        this->name = name;
+        this->adress = adress;
+        this->numberOfEvents = num;
+        this->events = events;
+}
+CultPlace::~CultPlace()
+{
+delete[] events;
+}
 //-------------------------------------------------------------------------
 //Метод виводу у файл базової частини для похідних классів
 void CultPlace::save(ostream& os)

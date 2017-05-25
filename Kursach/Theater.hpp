@@ -22,8 +22,6 @@ private:
     void load(istream& is);
 public:
     Theater(string name_t, string adress_t, string *events_t, int countOfDecorations, int antractTime, int num);
-    void getEventsList(string n) {};
-    void findEvent(string n) {};
     void showData();
     friend istream& operator >> (istream& is, CultPlace **place);
     int getAntractTime();
