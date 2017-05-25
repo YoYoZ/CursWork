@@ -9,7 +9,7 @@
 #include "PrioritizedList.hpp"
 //-------------------------------------------------------------------------
 //Конструктор для ініціалізації одразу при створенні классу
-PrioritizedList::PrioritizedList(CultPlace *cp, int priority)
+PrioritizedList::PrioritizedList(CultPlace *cp, int priority): PrioritizedList()
 {
     head = new node();
     tail = head;
@@ -18,7 +18,7 @@ PrioritizedList::PrioritizedList(CultPlace *cp, int priority)
     head->priority = priority;
     
 }
-PrioritizedList::PrioritizedList(){}
+PrioritizedList::PrioritizedList(): head(NULL), tail(NULL){}
 //-------------------------------------------------------------------------
 //Метод додавання нових елементів до черги
 void PrioritizedList::push(CultPlace *cp, int priority)
@@ -26,18 +26,19 @@ void PrioritizedList::push(CultPlace *cp, int priority)
     if(!initialized)
     {
         head = new node();
-        tail = head;
         head->cp = cp;
-        head->next = tail;
+        head->next = NULL;
         head->priority = priority;
+        tail = head;
         initialized = true;
     } else
     {
-    node *blk = new node();
-    blk->cp = cp;
-    blk->priority = priority;
-    tail ->next = blk;
-    tail = blk;
+        node *blk = new node();
+        blk->cp = cp;
+        blk->priority = priority;
+        blk->next = NULL;
+        tail ->next = blk;
+        tail = blk;
     }
 }
 //-------------------------------------------------------------------------
@@ -80,11 +81,11 @@ node* PrioritizedList::getHighest()
 int PrioritizedList::size()
 {
     int count = 0;
-    if(head == tail)
-        return 1;
     if (initialized)
     {
-        for (node *el = head; el->cp != NULL; count++, el = el->next){}
+        for (node *el = head; el!=NULL; el = el->next){
+            count++;
+        }
     }
     return count;
 }
@@ -156,10 +157,10 @@ ostream& operator <<(ostream& os, PrioritizedList& list)
 //Перевантажений оператор вводу
 istream& operator >> (istream& is, PrioritizedList& list)
 {
-    int size;
-    is.read(reinterpret_cast<char*>(&size), sizeof(int));
+    int sizem;
+    is.read(reinterpret_cast<char*>(&sizem), sizeof(int));
 
-    for (int i = 0; i < size; ++i) {
+    for (int i = 0; i < sizem; ++i) {
         int priority  = 0;
         is.read(reinterpret_cast<char*>(&priority), sizeof(priority));
         CultPlace *cp;
@@ -175,12 +176,15 @@ void PrioritizedList::clearList()
     int size = this->size();
     node *tmp = head;
     node *el = head;
-    for(int i = 0; i<size-1; i++)
+    for(int i = 0; i<size; i++)
     {
         tmp = el;
         el = el->next;
         delete tmp;
     }
+    head = NULL;
+    tail = NULL;
+    initialized = false;
 }
 //-------------------------------------------------------------------------
 //Метод пошуку елементу по його номеру

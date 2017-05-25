@@ -9,17 +9,19 @@
 #ifndef Menu_hpp
 #define Menu_hpp
 
-#include <stdio.h>
+
 #include "PrioritizedList.hpp"
 class Menu
 {
 
 private:
     int selection;
-    bool initialized = false;
-    char s[10];
     PrioritizedList p;
 public:
     void getStarted();
+    void createCinema();
+    void createTheater();
+    void saveToFile();
+    void loadFromFile();
 };
 #endif /* Menu_hpp */

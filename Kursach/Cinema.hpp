@@ -9,7 +9,7 @@
 #ifndef Cinema_hpp
 #define Cinema_hpp
 
-#include <stdio.h>
+
 #include "Places.hpp"
 
 enum projectorType

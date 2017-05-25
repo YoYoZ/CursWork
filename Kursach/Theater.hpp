@@ -9,7 +9,6 @@
 #ifndef Theater_hpp
 #define Theater_hpp
 
-#include <stdio.h>
 #include "Places.hpp"
 
 class Theater : public CultPlace

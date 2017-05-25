@@ -32,7 +32,7 @@ private:
     node *tail;
     node* get(const int i);
     void set(const int i, node& el);
-    bool initialized = 0;
+    bool initialized = false;
 public:
     PrioritizedList(CultPlace *cp, int priority);
     PrioritizedList();

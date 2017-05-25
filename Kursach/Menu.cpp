@@ -22,7 +22,6 @@ projectorType ConvertTo(string p);
 void Menu::getStarted()
 {
     cout<<"Hello. Please, enter your choice."<<endl;
-    cout << "WARNING! IF PROGRAM FREEZES TRY TO TYPE SOMETHING! THANK YOU FOR UNDERSTANDING." << endl;
     cout<<"#1. Create a cinema"<<endl;
     cout<<"#2. Create a theater"<<endl;
     cout<<"#3. Display all cultural places"<<endl;
@@ -39,75 +38,10 @@ void Menu::getStarted()
         switch(selection)
         {
             case 1:
-            {
-                cout<<"Please, enter name, adress, projector type, priority of place and count of halls of this cinema:"<<endl;
-                string name;
-                string adress;
-                string projectorType;
-                int priority;
-                int countOfHalls;
-                int numEvents = 0;
-                cout << "Enter name: ";
-                cin>>name;
-                cout << "Enter adress: ";
-                cin>>adress;
-                cout << "Enter projector type: ";
-                cin>>projectorType;
-                cout << "Enter priority: ";
-                priority = filterInt(cin);
-                cout << "Enter count of Halls: ";
-                countOfHalls = filterInt(cin);
-                cout << "Now, please, type how many events do you need for this place."<<endl;
-                cout << "Num events: ";
-                numEvents = filterInt(cin);
-                string *Events = new string[numEvents];
-                if(numEvents!=0)
-                {
-                    cout<<"Type by one events: "<<endl;
-                    for(int i =  0; i<numEvents; i++) {
-                        cout << "Type " << (i + 1) << " event: ";
-                        cin>>Events[i];
-                    }
-                    
-                }
-                Cinema *cn = new Cinema(name, adress, Cinema::ConvertTo(projectorType),countOfHalls, Events, numEvents);
-                p.push(cn, priority);
+                createCinema();
                 break;
-            }
             case 2:
-            {
-                cout<<"Please, enter name, adress, count of decoration, antract time and priority to work of this theater:"<<endl;
-                string name;
-                string adress;
-                int countOfDecorations;
-                int priority;
-                int antractTime;
-                int numEvents;
-                cout<<"Enter name:";
-                cin>>name;
-                cout<<"Enter adress: ";
-                cin>>adress;
-                cout<<"Enter count of decorations: ";
-                countOfDecorations = filterInt(cin);
-                cout<<"Enter antract time: ";
-                antractTime = filterInt(cin);
-                cout<<"Enter priority: ";
-                priority = filterInt(cin);
-                cout<<"Now, please, type how many events do you need for this place."<<endl;
-                numEvents = filterInt(cin);
-                string *Events = new string[numEvents];
-                if(numEvents!=0)
-                {
-                    cout<<"Type by one events: "<<endl;
-                    for(int i =  0; i<numEvents; i++) {
-                        cout << "Type " << (i + 1) << " event: ";
-                        cin>>Events[i];
-                    }
-                    
-                }
-                Theater *th = new Theater(name, adress, Events,countOfDecorations, antractTime, numEvents);
-                    p.push(th, priority);
-        }
+                createTheater();
                 break;
             case 3:
                 cout<<"Here all all cult. places:"<<endl;
@@ -131,62 +65,10 @@ void Menu::getStarted()
                 break;
             }
             case 6:
-            {
-                cout<<"Saving.."<<endl;
-                fstream str;
-                str.open("test.bin", ios::binary | ios::trunc | ios::out | ios::in);
-                if (str.bad()) {
-                    cout << "Can't create file." << endl;
-                    break;
-                }
-                //Функция принимает ссылку, поэтому надо разыменовать.
-                str << p;
-                
-                // Same sum
-                str.clear();
-                str.seekg(1);
-                char sum = 0;
-                while (str.good()) {
-                    char tmp;
-                    str.read(&tmp, sizeof(char));
-                    sum += tmp;
-                }
-                str.clear();
-                str.seekg(0);
-                str.seekp(0);
-                str.write(&sum, sizeof(char));
-                str.close();
-                //Нужно передать указатель на указатель, что функция могла положить туда
-                // результаты
+                saveToFile();
                 break;
-            }
             case 7:
-            {
-                cout<<"Loading.."<<endl;
-                fstream str;
-                str.open("test.bin", ios::binary | ios::in);
-                if (str.bad()) {
-                    cout << "Can't open file." << endl;
-                    break;
-                }
-                char fileSum = 0;
-                char calcSum = 0;
-                str.read(&fileSum, sizeof(char));
-                while (str.good()) {
-                    char tmp;
-                    str.read(&tmp, sizeof(char));
-                    calcSum += tmp;
-                }
-                if (fileSum != calcSum) {
-                    cout << "Alert! File data corruption detected. Exciting load process; now you need to re-save or recover file." << endl;
-                    str.close();
-                    return;
-                }
-                str.clear();
-                str.seekg(ios::beg);
-                p.clearList();
-                str >> p;
-        }
+                loadFromFile();
                 break;
             case 8:
             {
@@ -222,7 +104,133 @@ void Menu::getStarted()
     
 }
 
+void Menu::createCinema()
+{
+    cout<<"Please, enter name, adress, projector type, priority of place and count of halls of this cinema:"<<endl;
+    string name;
+    string adress;
+    string projectorType;
+    int priority;
+    int countOfHalls;
+    int numEvents = 0;
+    cout << "Enter name: ";
+    cin>>name;
+    cout << "Enter adress: ";
+    cin>>adress;
+    cout << "Enter projector type: ";
+    cin>>projectorType;
+    cout << "Enter priority: ";
+    priority = filterInt(cin);
+    cout << "Enter count of Halls: ";
+    countOfHalls = filterInt(cin);
+    cout << "Now, please, type how many events do you need for this place."<<endl;
+    cout << "Num events: ";
+    numEvents = filterInt(cin);
+    string *Events = new string[numEvents];
+    if(numEvents!=0)
+    {
+        cout<<"Type by one events: "<<endl;
+        for(int i =  0; i<numEvents; i++) {
+            cout << "Type " << (i + 1) << " event: ";
+            cin>>Events[i];
+        }
+        
+    }
+    Cinema *cn = new Cinema(name, adress, Cinema::ConvertTo(projectorType),countOfHalls, Events, numEvents);
+    p.push(cn, priority);
 
+}
+
+void Menu::createTheater()
+{
+    cout<<"Please, enter name, adress, count of decoration, antract time and priority to work of this theater:"<<endl;
+    string name;
+    string adress;
+    int countOfDecorations;
+    int priority;
+    int antractTime;
+    int numEvents;
+    cout<<"Enter name:";
+    cin>>name;
+    cout<<"Enter adress: ";
+    cin>>adress;
+    cout<<"Enter count of decorations: ";
+    countOfDecorations = filterInt(cin);
+    cout<<"Enter antract time: ";
+    antractTime = filterInt(cin);
+    cout<<"Enter priority: ";
+    priority = filterInt(cin);
+    cout<<"Now, please, type how many events do you need for this place."<<endl;
+    numEvents = filterInt(cin);
+    string *Events = new string[numEvents];
+    if(numEvents!=0)
+    {
+        cout<<"Type by one events: "<<endl;
+        for(int i =  0; i<numEvents; i++) {
+            cout << "Type " << (i + 1) << " event: ";
+            cin>>Events[i];
+        }
+        
+    }
+    Theater *th = new Theater(name, adress, Events,countOfDecorations, antractTime, numEvents);
+    p.push(th, priority);
+}
+
+void Menu::saveToFile()
+{
+cout<<"Saving.."<<endl;
+fstream str;
+str.open("test.bin", ios::binary | ios::trunc | ios::out | ios::in);
+if (str.bad()) {
+    cout << "Can't create file." << endl;
+    return;
+    }
+    char sum = 0;
+    str.write(&sum, sizeof(char));
+    str << p;
+    str.clear();
+    str.seekg(1);
+    
+    while (str.good()) {
+        char tmp;
+        str.read(&tmp, sizeof(char));
+        sum += tmp;
+    }
+    str.clear();
+    str.seekg(0);
+    str.seekp(0);
+    str.write(&sum, sizeof(char));
+    str.close();
+}
+
+void Menu::loadFromFile()
+{
+    cout<<"Loading.."<<endl;
+    fstream str;
+    str.open("test.bin", ios::binary | ios::in);
+    if (str.bad()) {
+        cout << "Can't open file." << endl;
+        return;
+    }
+    char fileSum = 0;
+    char calcSum = 0;
+    str.read(&fileSum, sizeof(char));
+    while (str.good()) {
+        char tmp;
+        str.read(&tmp, sizeof(char));
+        calcSum += tmp;
+    }
+    if (fileSum != calcSum) {
+        cout << "Alert! File data corruption detected. Exciting load process; now you need to re-save or recover file." << endl;
+        str.close();
+        return;
+    }
+    str.clear();
+    str.seekg(1);
+    p.clearList();
+    str >> p;
+
+}
 int filterInt (istream& is) {
     stringstream convertor;
     string tmp;
