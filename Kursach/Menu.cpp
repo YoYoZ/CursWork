@@ -35,7 +35,7 @@ void Menu::getStarted()
     cin.getline(s, 10);
     selection = atoi(s);
 
-    if(selection>0&&selection<9)
+    if(selection>0&&selection<10)
     {
         switch(selection)
         {
