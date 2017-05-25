@@ -45,7 +45,8 @@ void PrioritizedList::push(CultPlace *cp, int priority)
 void PrioritizedList::show()
 {
     node *el = head;
-    for (int i = 0; i<size(); i++)
+    if(initialized)
+        for (int i = 0; i<size(); i++)
     {
         cout << "Here is element #" << i+1 << ": " << endl;
         el->cp->showData();
@@ -139,12 +140,15 @@ void PrioritizedList::sortByName(int step)
 //Перевантажений оператор виводу
 ostream& operator <<(ostream& os, PrioritizedList& list)
 {
+    if(list.size()!=1)
+    {
     int size = list.size();
     os.write(reinterpret_cast<char*>(&size), sizeof(int));
     node* element = list.getHead();
     for (int i = 0; i<size ; element = element->next, i++) {
         os.write(reinterpret_cast<char*>(&element->priority), sizeof(int));
         os << element->cp;
+    }
     }
     return os;
 }

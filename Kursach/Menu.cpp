@@ -32,8 +32,7 @@ void Menu::getStarted()
     cout<<"#7. Load data from file"<<endl;
     cout<<"#8. Find the scene"<<endl;
     cout<<"#9. Exit"<<endl;
-    cin.getline(s, 10);
-    selection = atoi(s);
+    int selection = filterInt(cin);
 
     if(selection>0&&selection<10)
     {
