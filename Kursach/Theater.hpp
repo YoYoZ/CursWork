@@ -16,17 +16,18 @@ class Theater : public CultPlace
 private:
     int antractTime;
     int countOfDecorations;
-    Theater() {}
-    void save(ostream& os);
-    void load(istream& is);
+    Theater();
 public:
     Theater(string name_t, string adress_t, string *events_t, int countOfDecorations, int antractTime, int num);
     void showData();
     friend istream& operator >> (istream& is, CultPlace **place);
-    int getAntractTime();
-    int getCountOfDecorations();
+    int getAntractTime() const;
+    int getCountOfDecorations() const;
     void setAntractTime(int antract);
     void setCountOfDecorations(int count);
+    bool isTheater();
+    void save(ostream& os);
+    void load(istream& is);
 };
 
 #endif /* Theater_hpp */

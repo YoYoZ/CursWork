@@ -34,7 +34,7 @@ protected:
 public:
     CultPlace(string name, string adress, int num, string* events);
     CultPlace() {}
-    ~CultPlace();
+    virtual ~CultPlace();
     virtual void showData() = 0;
     virtual void save(ostream& os);
     virtual void load(istream& is);
@@ -49,6 +49,7 @@ public:
     int getNumberOfEvents();
     void setName(string name);
     void setAdress(string adress);
+    virtual bool isTheater() = 0;
 };
 
 

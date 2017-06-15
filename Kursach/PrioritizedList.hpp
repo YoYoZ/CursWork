@@ -10,7 +10,9 @@
 #define PrioritizedList_hpp
 
 #include "Places.hpp"
-
+#include <iostream>
+#include <fstream>
+#include <sstream>
 struct node
 {
     int priority;
@@ -18,28 +20,22 @@ struct node
     node *next;    
 };
 
-class PrioritizedList;
-
-ostream& operator <<(ostream& os, PrioritizedList& list);
-istream& operator >>(istream& is, PrioritizedList& list);
-
-
-
 class PrioritizedList
 {
 private:
     node *head;
     node *tail;
-    node* get(const int i);
-    void set(const int i, node& el);
     bool initialized = false;
 public:
     PrioritizedList(CultPlace *cp, int priority);
     PrioritizedList();
+    ~PrioritizedList();
     void push(CultPlace *cp, int priority);
     void remove();
     void show();
     bool removeByName(string name);
+    void serialize();
+    void deserialize();
     node *getHighest();
     int size();
     node* getHead();

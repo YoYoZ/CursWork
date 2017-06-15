@@ -19,6 +19,8 @@ using namespace std;
 int filterInt (istream& is);
 
 projectorType ConvertTo(string p);
+//-------------------------------------------------------------------------
+//Головна функція меню
 void Menu::getStarted()
 {
     cout<<"Hello. Please, enter your choice."<<endl;
@@ -103,7 +105,8 @@ void Menu::getStarted()
     getStarted();
     
 }
-
+//-------------------------------------------------------------------------
+//Функція створення нового кінотеатру
 void Menu::createCinema()
 {
     cout<<"Please, enter name, adress, projector type, priority of place and count of halls of this cinema:"<<endl;
@@ -140,7 +143,8 @@ void Menu::createCinema()
     p.push(cn, priority);
 
 }
-
+//-------------------------------------------------------------------------
+//Функція створення нового театру
 void Menu::createTheater()
 {
     cout<<"Please, enter name, adress, count of decoration, antract time and priority to work of this theater:"<<endl;
@@ -175,62 +179,22 @@ void Menu::createTheater()
     Theater *th = new Theater(name, adress, Events,countOfDecorations, antractTime, numEvents);
     p.push(th, priority);
 }
-
+//-------------------------------------------------------------------------
+//Функція збереження до файлу
 void Menu::saveToFile()
 {
-cout<<"Saving.."<<endl;
-fstream str;
-str.open("test.bin", ios::binary | ios::trunc | ios::out | ios::in);
-if (str.bad()) {
-    cout << "Can't create file." << endl;
-    return;
-    }
-    char sum = 0;
-    str.write(&sum, sizeof(char));
-    str << p;
-    str.clear();
-    str.seekg(1);
-    
-    while (str.good()) {
-        char tmp;
-        str.read(&tmp, sizeof(char));
-        sum += tmp;
-    }
-    str.clear();
-    str.seekg(0);
-    str.seekp(0);
-    str.write(&sum, sizeof(char));
-    str.close();
+    cout<<"Saving"<<endl;
+    p.serialize();
 }
-
+//-------------------------------------------------------------------------
+//Функція читання з файлу
 void Menu::loadFromFile()
 {
     cout<<"Loading.."<<endl;
-    fstream str;
-    str.open("test.bin", ios::binary | ios::in);
-    if (str.bad()) {
-        cout << "Can't open file." << endl;
-        return;
-    }
-    char fileSum = 0;
-    char calcSum = 0;
-    str.read(&fileSum, sizeof(char));
-    while (str.good()) {
-        char tmp;
-        str.read(&tmp, sizeof(char));
-        calcSum += tmp;
-    }
-    if (fileSum != calcSum) {
-        cout << "Alert! File data corruption detected. Exciting load process; now you need to re-save or recover file." << endl;
-        str.close();
-        return;
-    }
-    str.clear();
-    str.seekg(1);
-    p.clearList();
-    str >> p;
-
+    p.deserialize();
 }
+//-------------------------------------------------------------------------
+//Функція перевірки, чи числове значення вводиться
 int filterInt (istream& is) {
     stringstream convertor;
     string tmp;

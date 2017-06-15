@@ -22,20 +22,20 @@ class Cinema : public CultPlace
 private:
     projectorType p;
     int countOfHalls;
-    Cinema() {}
-    void save(ostream& os);
-    void load(istream& is);
-    string ConvertTo(projectorType p);
+    Cinema();
+    string ConvertTo(projectorType p) const;
 public:
     Cinema(string name, string adress, projectorType p, int countOfHalls, string *events, int num);
     void showData();
     friend istream& operator >> (istream& is, CultPlace **place);
-    string getProjectorType();
-    int getCountOfHalls();
+    string getProjectorType() const;
+    int getCountOfHalls() const;
     void setProjectorType(string type);
     void setCountOfHalls(int count);
-    static projectorType ConvertTo(string p);
-
+    static projectorType ConvertTo(string p) ;
+    bool isTheater();
+    void save(ostream& os);
+    void load(istream& is);
 };
 #endif /* Cinema_hpp */
 

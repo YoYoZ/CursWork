@@ -10,16 +10,10 @@
 #include "Cinema.hpp"
 #include "Theater.hpp"
 
-CultPlace::CultPlace(string name, string adress, int num, string* events)
-{
-        this->name = name;
-        this->adress = adress;
-        this->numberOfEvents = num;
-        this->events = events;
-}
+CultPlace::CultPlace(string name, string adress, int num, string* events) : name(name), adress(adress), numberOfEvents(num), events(events) {}
 CultPlace::~CultPlace()
 {
-delete[] events;
+    delete[] events;
 }
 //-------------------------------------------------------------------------
 //Метод виводу у файл базової частини для похідних классів
@@ -27,9 +21,9 @@ void CultPlace::save(ostream& os)
 {
     os << name << endl;
     os << adress << endl;
-    os.write(reinterpret_cast<char*>(&numberOfEvents), sizeof(numberOfEvents));
+    os.write(reinterpret_cast<char*>(&numberOfEvents), sizeof(numberOfEvents)); //Записуємо кількість подій
     for (int i = 0; i < numberOfEvents; ++i) {
-        os << events[i] << endl;
+        os << events[i] << endl; // По одному записуємо кожну подію
     }
 }
 //-------------------------------------------------------------------------
@@ -81,7 +75,7 @@ istream& operator >> (istream& is, CultPlace **place)
             break;
     }
     if (*place != NULL)
-        (*place)->load(is);
+        (*place)->load(is); //Читаємо дані з потоку вводу
     return is;
 }
 
@@ -107,7 +101,7 @@ void CultPlace::addEvent(string name)
     string *newEvents = new string[numberOfEvents];
     for(int i = 0; i<numberOfEvents-1; i++)
         newEvents[i] = events[i];
-    newEvents[numberOfEvents-1] = name;
+    newEvents[numberOfEvents-1] = name; //Створюємо новую подію і записуємо прочитані дані
     events = newEvents;
 }
 //-------------------------------------------------------------------------
@@ -148,3 +142,8 @@ void CultPlace::setName(string name)
     this->name = name;
 }
 
+void CultPlace::showData()
+{
+    cout << "Name:\t" << name << endl;
+    cout << "Address:\t" << adress << endl;
+}
